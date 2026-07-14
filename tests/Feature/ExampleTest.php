@@ -11,4 +11,4 @@ class ExampleTest extends TestCase
         $this->get('/')
             ->assertRedirectToRoute('login');
     }
-}
+} 
