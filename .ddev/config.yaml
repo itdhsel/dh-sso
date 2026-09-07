@@ -11,8 +11,17 @@ database:
     version: "11.8"
 use_dns_when_possible: true
 composer_version: "2"
-web_environment: []
 corepack_enable: false
+
+# --- Added for LDAP/Active Directory SSO ---
+
+# 1. Tells PHP to bypass strict certificate validation for your self-signed cert
+web_environment:
+  - LDAPTLS_REQCERT=never
+
+# 2. Ensures DDEV can resolve the Windows AD hostname to its internal IP
+web_extra_hosts:
+  - "SLY-ADDC02.hospitalselayang.gov.my:10.1.20.30"
 
 # Key features of DDEV's config.yaml:
 
