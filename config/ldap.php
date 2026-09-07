@@ -28,7 +28,7 @@ return [
 
     'connections' => [
 
-        'default' => [
+        /*'default' => [
             'hosts' => [env('LDAP_HOST', '127.0.0.1')],
             'username' => env('LDAP_USERNAME', 'cn=user,dc=local,dc=com'),
             'password' => env('LDAP_PASSWORD', 'secret'),
@@ -40,6 +40,35 @@ return [
             'use_sasl' => env('LDAP_SASL', false),
             'sasl_options' => [
                 // 'mech' => 'GSSAPI',
+            ],
+        ],*/
+
+        'default' => [
+            'hosts' => [
+                env('LDAP_HOST'),
+            ],
+        
+            'port' => env('LDAP_PORT', 636),
+        
+            'username' => env('LDAP_USERNAME'),
+        
+            'password' => env('LDAP_PASSWORD'),
+        
+            'base_dn' => env('LDAP_BASE_DN'),
+        
+            'timeout' => env('LDAP_TIMEOUT', 5),
+        
+            'version' => 3,
+        
+            'use_tls' => env('LDAP_TLS', false),
+        
+            'use_starttls' => env('LDAP_STARTTLS', false),
+        
+            'use_sasl' => env('LDAP_SASL', false),
+        
+            'options' => [
+                LDAP_OPT_PROTOCOL_VERSION => 3,
+                LDAP_OPT_REFERRALS => false,
             ],
         ],
 
