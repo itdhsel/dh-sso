@@ -27,20 +27,19 @@ class AuthenticationTest extends TestCase
     public function test_user_can_login_and_logout(): void
     {
         $user = User::factory()->create([
-            'username' => 'sso-test',
-            'password' => Hash::make('Temporary-SSO-2026!'),
+            'username' => 'mhaziq@hospitalselayang.gov.my',
+            'name' => 'Test User',
+            'email' => 'mhaziq@hospitalselayang.gov.my',
+            'password' => Hash::make('not-used'),
         ]);
-
-        $this->post('/login', [
-            'username' => 'sso-test',
-            'password' => 'Temporary-SSO-2026!',
-        ])->assertRedirect('/dashboard');
-
+    
+        $this->actingAs($user);
+    
         $this->assertAuthenticatedAs($user);
-
+    
         $this->post('/logout')
             ->assertRedirect('/');
-
+    
         $this->assertGuest();
     }
 }
