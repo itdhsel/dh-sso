@@ -1,38 +1,79 @@
 @extends('layouts.app')
 
-@section('title', 'DH Application Dashboard')
+
+@section('title', 'DH Dashboard')
+
 
 @section('content')
-    <section class="card">
-        <header class="dashboard-header">
-            <div>
-                <h1>DH Application Dashboard</h1>
 
-                <p class="subtitle">
-                    Signed in as
-                    <strong>{{ auth()->user()->name }}</strong>
-                    ({{ auth()->user()->username }})
-                </p>
+
+<section class="card">
+
+
+    <h1>
+        Welcome,
+        {{ $user->name ?? $user->username }}
+    </h1>
+
+
+    <p>
+        Username:
+        {{ $user->username ?? '-' }}
+    </p>
+
+
+    <hr>
+
+
+    <h2>
+        Applications
+    </h2>
+
+
+
+    <div class="app-grid">
+
+
+        @foreach($apps as $app)
+
+
+        <div class="app-card">
+
+
+            <div class="app-icon">
+                {{ $app->icon }}
             </div>
 
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
 
-                <button class="secondary-button" type="submit">
-                    Sign out
-                </button>
-            </form>
-        </header>
+            <h3>
+                {{ $app->name }}
+            </h3>
 
-        <div class="app-grid">
-            <article class="app-tile">
-                <h2>Applications</h2>
 
-                <p class="muted">
-                    Authorised applications will appear here after the
-                    SSO application catalogue is configured.
-                </p>
-            </article>
+            <p>
+                {{ $app->description }}
+            </p>
+
+
+            <a href="{{ $app->url }}"
+               target="_blank">
+
+                Open
+
+            </a>
+
+
         </div>
-    </section>
+
+
+        @endforeach
+
+
+
+    </div>
+
+
+</section>
+
+
 @endsection
