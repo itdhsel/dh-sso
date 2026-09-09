@@ -2,80 +2,53 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Models\Application;
-use App\Models\SsoToken;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
-
-
 class SsoController extends Controller
 {
-
-
     public function launch($code)
     {
-
-        /*
-         * Current logged-in user
-         */
         $user = Auth::user();
 
-
         if (!$user) {
-
             abort(401);
-
         }
 
-
-
         /*
-         * Find application
+         * Find application in 'apps' table
          */
-        $app = Application::where('code', $code)
-            ->where('active', true)
-            ->firstOrFail();
+        $app = DB::table('apps')->where('code', $code)->first();
 
-
+        if (!$app) {
+            abort(404, 'Application not found');
+        }
 
         /*
          * Generate secure token
          */
         $token = Str::random(64);
 
-
-
         /*
-         * Store token
+         * Store token in 'sso_tokens' table
          */
-        SsoToken::create([
-
+        DB::table('sso_tokens')->insert([
             'token' => $token,
-
             'user_id' => $user->id,
-
             'application_code' => $app->code,
-
             'expires_at' => now()->addMinutes(5),
-
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
-
-
         /*
-         * Redirect to PHP application
+         * Build redirect URL using 'token' parameter key expected by legacy apps
          */
-        return redirect(
+        $baseUrl = rtrim($app->url, '/');
+        $separator = str_contains($baseUrl, '?') ? '&' : '?';
 
-            $app->url .
-            '/sso-login.php?token=' .
-            $token
-
-        );
-
+        return redirect()->away($baseUrl . $separator . 'token=' . $token);
     }
-
-
 }
