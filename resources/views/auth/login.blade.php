@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Portal Authentication')
+@section('title', 'Selayang Hospital SSO')
 
 @section('content')
 <div class="page">
     <div class="login-card">
         <div class="login-header">
-            <h1>DH SSO Portal</h1>
-            <p class="subtitle">Enter your credentials to access system resources</p>
+            <h1>Selayang Hospital<br>Single Sign On Portal</h1>
+            <p class="subtitle">Enter your credentials to access hospital applications</p>
         </div>
 
         @if ($errors->any())
@@ -42,6 +42,10 @@
                 Authenticate System
             </button>
         </form>
+
+        <footer class="login-footer">
+            Developed by Muhammad Haziq Zikri (ITD HSEL)
+        </footer>
     </div>
 </div>
 @endsection

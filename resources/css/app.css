@@ -151,3 +151,14 @@ input[type="password"]:focus {
     margin: 0;
     padding-left: 20px;
 }
+
+/* Login Footer Credit */
+.login-footer {
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(51, 65, 85, 0.6);
+    text-align: center;
+    font-size: 0.75rem;
+    color: #64748b;
+    letter-spacing: 0.03em;
+}
