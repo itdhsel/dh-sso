@@ -31,9 +31,10 @@
             'ir'       => 'Quality Department',
         ];
 
-        // Group applications by department
+        // Group applications by department with fallback
         $groupedApps = $apps->groupBy(function($app) use ($departmentMap) {
-            return $departmentMap[strtolower($app->code)] ?? 'General Department';
+            $code = strtolower(is_object($app) ? $app->code : ($app['code'] ?? ''));
+            return $departmentMap[$code] ?? 'General Department';
         });
     @endphp
 
@@ -50,16 +51,22 @@
 
                 <div class="app-grid">
                     @foreach($categoryApps as $app)
+                    @php
+                        $appCode = is_object($app) ? $app->code : $app['code'];
+                        $appName = is_object($app) ? $app->name : $app['name'];
+                        $appIcon = is_object($app) ? $app->icon : $app['icon'];
+                        $appDesc = is_object($app) ? $app->description : $app['description'];
+                    @endphp
                     <div class="app-card">
                         <div class="app-card-body">
                             <div class="app-icon">
-                                {{ $app->icon }}
+                                {{ $appIcon }}
                             </div>
-                            <h3 class="app-title">{{ $app->name }}</h3>
-                            <p class="app-desc">{{ $app->description }}</p>
+                            <h3 class="app-title">{{ $appName }}</h3>
+                            <p class="app-desc">{{ $appDesc }}</p>
                         </div>
 
-                        <a href="{{ route('sso.launch', $app->code) }}" target="_blank" rel="noopener noreferrer" class="btn-launch">
+                        <a href="{{ route('sso.launch', $appCode) }}" target="_blank" rel="noopener noreferrer" class="btn-launch">
                             <span>Open Application</span>
                             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>

@@ -25,7 +25,7 @@
 
             <div class="field">
                 <label for="username">Username / Email</label>
-                <input type="text" id="username" name="username" value="{{ old('username') }}" required autofocus autocomplete="off" placeholder="e.g. mhaziq">
+                <input type="text" id="username" name="username" value="{{ old('username') }}" required autofocus autocomplete="off" placeholder="e.g. user">
             </div>
 
             <div class="field">
