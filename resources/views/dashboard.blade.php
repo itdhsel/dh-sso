@@ -55,11 +55,8 @@
             </p>
 
 
-            <a href="{{ $app->url }}"
-               target="_blank">
-
+            <a href="{{ route('sso.launch',$app->code) }}">
                 Open
-
             </a>
 
 
