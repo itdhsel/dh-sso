@@ -42,10 +42,11 @@
                 Authenticate System
             </button>
         </form>
-
-        <footer class="login-footer">
-            Developed by Muhammad Haziq Zikri (ITD HSEL)
-        </footer>
     </div>
+
+    <!-- Page Footer -->
+    <footer class="login-footer">
+        © {{ date('Y') }} Hospital Selayang. Developed by Muhammad Haziq Zikri (ITD HSEL)
+    </footer>
 </div>
 @endsection

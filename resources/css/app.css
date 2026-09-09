@@ -10,11 +10,12 @@ body {
     min-height: 100vh;
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     color: #f1f5f9;
-    background: #090d16;
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.3) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.15) 0px, transparent 50%);
-    background-attachment: fixed;
+    
+    /* Background Image with Dark Technologist Overlay */
+    background: 
+        linear-gradient(135deg, rgba(105, 126, 177, 0.88) 0%, rgba(15, 23, 42, 0.82) 100%),
+        url('/images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
 .page {
@@ -152,13 +153,20 @@ input[type="password"]:focus {
     padding-left: 20px;
 }
 
-/* Login Footer Credit */
+/* Bottom Fixed Page Footer */
 .login-footer {
-    margin-top: 32px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(51, 65, 85, 0.6);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 16px 20px;
+    background: rgba(9, 13, 22, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(56, 189, 248, 0.15);
     text-align: center;
-    font-size: 0.75rem;
-    color: #64748b;
-    letter-spacing: 0.03em;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    letter-spacing: 0.04em;
+    z-index: 10;
 }
