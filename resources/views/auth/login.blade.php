@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'DH SSO Login')
+@section('title', 'Portal Authentication')
 
 @section('content')
-    <section class="card login-card">
-        <h1>DH Single Sign-On</h1>
-
-        <p class="subtitle">
-            Sign in to access authorised DH applications.
-        </p>
+<div class="page">
+    <div class="login-card">
+        <div class="login-header">
+            <h1>DH SSO Portal</h1>
+            <p class="subtitle">Enter your credentials to access system resources</p>
+        </div>
 
         @if ($errors->any())
-            <div class="error-box" role="alert">
+            <div class="error-box">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -24,45 +24,24 @@
             @csrf
 
             <div class="field">
-                <label for="username">Username</label>
-
-                <input
-                    id="username"
-                    name="username"
-                    type="text"
-                    value="{{ old('username') }}"
-                    autocomplete="username"
-                    required
-                    autofocus
-                >
+                <label for="username">Username / Email</label>
+                <input type="text" id="username" name="username" value="{{ old('username') }}" required autofocus autocomplete="off" placeholder="e.g. mhaziq">
             </div>
 
             <div class="field">
                 <label for="password">Password</label>
-
-                <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autocomplete="current-password"
-                    required
-                >
+                <input type="password" id="password" name="password" required placeholder="••••••••">
             </div>
 
             <div class="remember">
-                <input
-                    id="remember"
-                    name="remember"
-                    type="checkbox"
-                    value="1"
-                >
-
-                <label for="remember">Keep me signed in</label>
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">Keep session active</label>
             </div>
 
-            <button class="primary-button" type="submit">
-                Sign in
+            <button type="submit" class="primary-button">
+                Authenticate System
             </button>
         </form>
-    </section>
+    </div>
+</div>
 @endsection
