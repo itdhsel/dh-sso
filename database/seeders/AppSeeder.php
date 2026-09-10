@@ -35,7 +35,7 @@ class AppSeeder extends Seeder
                 'code' => 'ir',
                 'description' => 'Incident Reporting System',
                 'icon' => '⚠️',
-                'url' => 'http://10.1.25.135/ir/',
+                'url' => 'http://10.1.25.135/ir/sso-login.php',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
