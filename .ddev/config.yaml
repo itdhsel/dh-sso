@@ -9,7 +9,8 @@ additional_fqdns: []
 database:
     type: mariadb
     version: "11.8"
-use_dns_when_possible: true
+use_dns_when_possible: false
+bind_all_interfaces: true
 composer_version: "2"
 corepack_enable: false
 
