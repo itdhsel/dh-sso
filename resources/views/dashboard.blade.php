@@ -5,20 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Enterprise Dashboard - SSO Portal Hospital Selayang</title>
 
-    <!-- Force Tailwind via CDN to bypass old layout issues -->
+    <!-- Force Tailwind via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<!-- h-screen and overflow-hidden prevent the whole page from scrolling, keeping the footer fixed -->
 <body class="bg-slate-100 font-sans antialiased text-gray-900 h-screen flex flex-col overflow-hidden">
 
-    <!-- Corporate Top Navigation (Fixed at top) -->
+    <!-- Corporate Top Navigation -->
     <nav class="bg-slate-900 shadow-lg border-b-4 border-blue-600 relative z-20 shrink-0">
-        <!-- Subtle dot pattern for texture -->
         <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#38bdf8 1px, transparent 1px); background-size: 24px 24px;"></div>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-30">
             <div class="flex justify-between items-center h-20">
-                
                 <!-- Logo & Brand -->
                 <div class="flex items-center">
                     <div class="bg-white p-2 rounded mr-4 shadow-sm">
@@ -52,18 +49,34 @@
     </nav>
 
     @php
-        // Map application codes to their respective departments
-        $departmentMap = [
-            'cme'      => 'Medical Department',
-            'imonitor' => 'Pharmacy Department',
-            'ir'       => 'Quality Department',
+        // 1. Format existing database apps
+        $formattedApps = collect($apps)->map(function($app) {
+            return [
+                'code' => is_object($app) ? $app->code : $app['code'],
+                'name' => is_object($app) ? $app->name : $app['name'],
+                'icon' => is_object($app) ? $app->icon : $app['icon'],
+                'url'  => route('sso.launch', is_object($app) ? $app->code : $app['code']),
+            ];
+        })->toArray();
+
+        // 2. Define the new external apps using matching EMOJI icons instead of SVGs
+        $externalApps = [
+            [
+                'code' => 'iqms',
+                'name' => 'iQMS (Queue Management System)',
+                'icon' => '👥',
+                'url'  => 'https://jknselangor.moh.gov.my/qms/#!/facility/13',
+            ],
+            [
+                'code' => 'eporter',
+                'name' => 'ePorter',
+                'icon' => '🚑',
+                'url'  => 'https://sites.google.com/moh.gov.my/hseleporter/home',
+            ]
         ];
 
-        // Group applications by department with fallback
-        $groupedApps = $apps->groupBy(function($app) use ($departmentMap) {
-            $code = strtolower(is_object($app) ? $app->code : ($app['code'] ?? ''));
-            return $departmentMap[$code] ?? 'General Department';
-        });
+        // 3. Merge all apps together into one flat list
+        $allApps = array_merge($formattedApps, $externalApps);
 
         // Array of vibrant colors matching the reference image style
         $cardColors = [
@@ -79,67 +92,46 @@
         $colorIndex = 0;
     @endphp
 
-    <!-- Main Content Area (This section scrolls if there are many apps) -->
+    <!-- Main Content Area -->
     <main class="flex-grow overflow-y-auto w-full relative z-10 p-6 sm:p-8">
-        <div class="max-w-7xl mx-auto">
+        <div class="max-w-6xl mx-auto">
             
+            <!-- Updated Title -->
             <div class="mb-8 border-l-4 border-blue-600 pl-4">
-                <h2 class="text-2xl font-bold text-slate-800 tracking-tight uppercase">Enterprise Applications</h2>
+                <h2 class="text-2xl font-bold text-slate-800 tracking-tight uppercase">Selayang Hospital Internal Application</h2>
             </div>
 
-            @foreach($groupedApps as $department => $categoryApps)
-                <div class="mb-10">
+            <!-- Single Unified Grid (Max 3 Columns) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                @foreach($allApps as $app)
+                @php
+                    $currentColor = $cardColors[$colorIndex % count($cardColors)];
+                    $colorIndex++;
+                @endphp
+                
+                <a href="{{ $app['url'] }}" target="_blank" rel="noopener noreferrer" 
+                   class="relative block h-32 rounded-lg shadow-lg {{ $currentColor }} overflow-hidden group hover:scale-[1.02] hover:-translate-y-1 transition-all duration-200">
                     
-                    <!-- Department Section Header -->
-                    <div class="mb-4">
-                        <h3 class="text-lg font-bold text-slate-500 uppercase tracking-wider">{{ $department }}</h3>
-                    </div>
-
-                    <!-- Application Cards Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                        @foreach($categoryApps as $app)
-                        @php
-                            $appCode = is_object($app) ? $app->code : $app['code'];
-                            $appName = is_object($app) ? $app->name : $app['name'];
-                            $appIcon = is_object($app) ? $app->icon : $app['icon'];
-                            
-                            // Select next color and increment
-                            $currentColor = $cardColors[$colorIndex % count($cardColors)];
-                            $colorIndex++;
-                        @endphp
-                        
-                        <!-- Colorful Clickable App Tile -->
-                        <a href="{{ route('sso.launch', $appCode) }}" target="_blank" rel="noopener noreferrer" 
-                           class="relative block h-32 rounded-lg shadow-lg {{ $currentColor }} overflow-hidden group hover:scale-[1.02] hover:-translate-y-1 transition-all duration-200">
-                            
-                            <!-- Geometric Background Pattern overlay -->
-                            <div class="absolute inset-0 opacity-[0.15] pointer-events-none transition-opacity group-hover:opacity-20" 
-                                 style="background-image: url('data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M12 24L0 12 12 0l12 12-12 12zM12 21.17L21.17 12 12 2.83 2.83 12 12 21.17z\' fill=\'%23ffffff\' fill-rule=\'evenodd\'/%3E%3C/svg%3E'); background-size: 24px 24px;">
-                            </div>
-                            
-                            <!-- App Title (Top Left) -->
-                            <div class="absolute top-4 left-4 right-12 z-10">
-                                <h4 class="text-white font-bold text-lg leading-tight tracking-wide drop-shadow-sm">{{ $appName }}</h4>
-                            </div>
-
-                            <!-- App Icon (Bottom Right) -->
-                            <div class="absolute bottom-3 right-4 z-10 text-white/90 group-hover:text-white transition-colors flex items-center justify-center text-4xl w-10 h-10 drop-shadow-md">
-                                @if($appIcon)
-                                    {!! $appIcon !!}
-                                @else
-                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                @endif
-                            </div>
-                        </a>
-                        @endforeach
+                    <div class="absolute inset-0 opacity-[0.15] pointer-events-none transition-opacity group-hover:opacity-20" 
+                         style="background-image: url('data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M12 24L0 12 12 0l12 12-12 12zM12 21.17L21.17 12 12 2.83 2.83 12 12 21.17z\' fill=\'%23ffffff\' fill-rule=\'evenodd\'/%3E%3C/svg%3E'); background-size: 24px 24px;">
                     </div>
                     
-                </div>
-            @endforeach
+                    <div class="absolute top-4 left-4 right-12 z-10">
+                        <h4 class="text-white font-bold text-lg leading-tight tracking-wide drop-shadow-sm">{{ $app['name'] }}</h4>
+                    </div>
+
+                    <!-- App Icon (Now fully standardizing emojis) -->
+                    <div class="absolute bottom-3 right-4 z-10 text-4xl drop-shadow-md">
+                        {!! $app['icon'] !!}
+                    </div>
+                </a>
+                @endforeach
+            </div>
+            
         </div>
     </main>
 
-    <!-- Footer (Fixed at bottom) -->
+    <!-- Footer -->
     <footer class="bg-white border-t border-gray-200 py-4 shrink-0 relative z-20">
         <div class="max-w-7xl mx-auto px-4 text-center text-xs font-semibold text-slate-500">
             © {{ date('Y') }} Hospital Selayang. Developed by Muhammad Haziq Zikri (ITD HSEL)
