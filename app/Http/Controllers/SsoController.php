@@ -18,9 +18,9 @@ class SsoController extends Controller
         }
 
         /*
-         * Find application in 'apps' table
+         * Find application in 'applications' table
          */
-        $app = DB::table('apps')->where('code', $code)->first();
+        $app = DB::table('applications')->where('code', $code)->first();
 
         if (!$app) {
             abort(404, 'Application not found');

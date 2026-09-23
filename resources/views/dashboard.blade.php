@@ -73,13 +73,14 @@
 
             <!-- Single Unified Grid (Max 3 Columns) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-                @foreach($apps as $app)
+            @foreach($apps as $app)
                 @php
                     $currentColor = $cardColors[$colorIndex % count($cardColors)];
                     $colorIndex++;
                     
-                    // Route logic: Use database URL if it exists, otherwise generate the secure SSO launch link
-                    $launchUrl = $app->url ? $app->url : route('sso.launch', $app->code);
+                    // Route logic: If the app has an internal server IP, route through the SSO launcher to get a token.
+                    // If it does not have a server IP, it is a public external app, so go directly to the URL.
+                    $launchUrl = $app->server_ip ? route('sso.launch', $app->code) : $app->url;
                 @endphp
                 
                 <a href="{{ $launchUrl }}" target="_blank" rel="noopener noreferrer" 
