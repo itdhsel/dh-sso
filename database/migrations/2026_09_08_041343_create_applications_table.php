@@ -43,19 +43,18 @@ return new class extends Migration
             /*
              * Server hosting the application
              */
-            $table->string('server_ip');
-
+            $table->string('server_ip')->nullable();
 
             /*
              * Application URL
              */
-            $table->string('url');
-
+            $table->string('url')->nullable();
+            
 
             /*
              * Icon / emoji
              */
-            $table->string('icon')
+            $table->text('icon')
                   ->nullable();
 
 

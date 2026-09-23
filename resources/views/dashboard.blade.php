@@ -49,36 +49,7 @@
     </nav>
 
     @php
-        // 1. Format existing database apps
-        $formattedApps = collect($apps)->map(function($app) {
-            return [
-                'code' => is_object($app) ? $app->code : $app['code'],
-                'name' => is_object($app) ? $app->name : $app['name'],
-                'icon' => is_object($app) ? $app->icon : $app['icon'],
-                'url'  => route('sso.launch', is_object($app) ? $app->code : $app['code']),
-            ];
-        })->toArray();
-
-        // 2. Define the new external apps using matching EMOJI icons instead of SVGs
-        $externalApps = [
-            [
-                'code' => 'iqms',
-                'name' => 'iQMS (Queue Management System)',
-                'icon' => '👥',
-                'url'  => 'https://jknselangor.moh.gov.my/qms/#!/facility/13',
-            ],
-            [
-                'code' => 'eporter',
-                'name' => 'ePorter',
-                'icon' => '🚑',
-                'url'  => 'https://sites.google.com/moh.gov.my/hseleporter/home',
-            ]
-        ];
-
-        // 3. Merge all apps together into one flat list
-        $allApps = array_merge($formattedApps, $externalApps);
-
-        // Array of vibrant colors matching the reference image style
+        // Array of vibrant colors matching the corporate style
         $cardColors = [
             'bg-amber-500 shadow-amber-500/30',
             'bg-rose-600 shadow-rose-600/30',
@@ -96,20 +67,22 @@
     <main class="flex-grow overflow-y-auto w-full relative z-10 p-6 sm:p-8">
         <div class="max-w-6xl mx-auto">
             
-            <!-- Updated Title -->
             <div class="mb-8 border-l-4 border-blue-600 pl-4">
                 <h2 class="text-2xl font-bold text-slate-800 tracking-tight uppercase">Selayang Hospital Internal Application</h2>
             </div>
 
             <!-- Single Unified Grid (Max 3 Columns) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-                @foreach($allApps as $app)
+                @foreach($apps as $app)
                 @php
                     $currentColor = $cardColors[$colorIndex % count($cardColors)];
                     $colorIndex++;
+                    
+                    // Route logic: Use database URL if it exists, otherwise generate the secure SSO launch link
+                    $launchUrl = $app->url ? $app->url : route('sso.launch', $app->code);
                 @endphp
                 
-                <a href="{{ $app['url'] }}" target="_blank" rel="noopener noreferrer" 
+                <a href="{{ $launchUrl }}" target="_blank" rel="noopener noreferrer" 
                    class="relative block h-32 rounded-lg shadow-lg {{ $currentColor }} overflow-hidden group hover:scale-[1.02] hover:-translate-y-1 transition-all duration-200">
                     
                     <div class="absolute inset-0 opacity-[0.15] pointer-events-none transition-opacity group-hover:opacity-20" 
@@ -117,12 +90,16 @@
                     </div>
                     
                     <div class="absolute top-4 left-4 right-12 z-10">
-                        <h4 class="text-white font-bold text-lg leading-tight tracking-wide drop-shadow-sm">{{ $app['name'] }}</h4>
+                        <h4 class="text-white font-bold text-lg leading-tight tracking-wide drop-shadow-sm">{!! nl2br(e($app->name)) !!}</h4>
                     </div>
 
-                    <!-- App Icon (Now fully standardizing emojis) -->
-                    <div class="absolute bottom-3 right-4 z-10 text-4xl drop-shadow-md">
-                        {!! $app['icon'] !!}
+                    <!-- App Icon -->
+                    <div class="absolute bottom-3 right-4 z-10 text-white/90 group-hover:text-white transition-colors flex items-center justify-center w-10 h-10 drop-shadow-md">
+                        @if($app->icon)
+                            {!! $app->icon !!}
+                        @else
+                            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        @endif
                     </div>
                 </a>
                 @endforeach

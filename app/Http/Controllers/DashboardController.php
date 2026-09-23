@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Application; // 1. Ensure you import the Application model
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
-        $apps = DB::table('apps')->get();
+        // 2. Change this from App::all() or DB::table('apps') to Application::all()
+        $apps = Application::all(); 
 
-        return view('dashboard', compact('user', 'apps'));
+        return view('dashboard', [
+            'user' => $request->user(),
+            'apps' => $apps
+        ]);
     }
 }
