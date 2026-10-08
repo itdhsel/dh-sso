@@ -17,6 +17,16 @@ class SsoController extends Controller
             abort(401);
         }
 
+        // --- Extract Job Description from AD DN ---
+        $jobDescription = 'Unknown';
+        if ($user->ldap) {
+            $dn = $user->ldap->getDn();
+            if (preg_match('/OU=([^,]+)/', $dn, $matches)) {
+                $jobDescription = $matches[1];
+            }
+        }
+        // ------------------------------------------
+
         /*
          * Find application in 'applications' table
          */
@@ -38,6 +48,7 @@ class SsoController extends Controller
             'token' => $token,
             'user_id' => $user->id,
             'application_code' => $app->code,
+            'job_description' => $jobDescription, // Added to database insert
             'expires_at' => now()->addMinutes(5),
             'created_at' => now(),
             'updated_at' => now(),

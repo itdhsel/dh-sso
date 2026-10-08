@@ -31,6 +31,10 @@
                 <div class="flex items-center gap-6">
                     <div class="text-right hidden md:block">
                         <p class="text-sm font-bold text-white">{{ $user->name ?? $user->username }}</p>
+                        <!-- ADDED: Job Description Display -->
+                        <p class="text-xs font-bold text-blue-400 mt-0.5 uppercase tracking-wide">
+                            {{ $user->job_description ?? 'Role Not Set' }}
+                        </p>
                         <p class="text-xs text-gray-400 flex items-center justify-end gap-1 mt-0.5">
                             <span class="inline-block w-2 h-2 bg-green-500 rounded-full shadow-[0_0_5px_#22c55e]"></span>
                             {{ $user->username ?? '-' }}

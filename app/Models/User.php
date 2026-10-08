@@ -29,4 +29,18 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+/**
+     * Get the user's job description from their formatted name.
+     */
+    public function getJobDescriptionAttribute()
+    {
+        // Extract the text inside the last set of parentheses in the user's name
+        // Example: "Muhammad Haziq (ITD)" will extract "ITD"
+        if (preg_match('/\(([^)]+)\)[^()]*$/', $this->name, $matches)) {
+            return $matches[1];
+        }
+        
+        return 'UNKNOWN';
+    }
 }
