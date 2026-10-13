@@ -15,6 +15,13 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'job_description',
+        'no_kp',
+        'jantina',
+        'bangsa',
+        'gred',
+        'kumpulan',
+        'jabatan',
     ];
 
     protected $hidden = [
@@ -30,17 +37,4 @@ class User extends Authenticatable
         ];
     }
 
-/**
-     * Get the user's job description from their formatted name.
-     */
-    public function getJobDescriptionAttribute()
-    {
-        // Extract the text inside the last set of parentheses in the user's name
-        // Example: "Muhammad Haziq (ITD)" will extract "ITD"
-        if (preg_match('/\(([^)]+)\)[^()]*$/', $this->name, $matches)) {
-            return $matches[1];
-        }
-        
-        return 'UNKNOWN';
-    }
 }

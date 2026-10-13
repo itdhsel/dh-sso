@@ -28,10 +28,10 @@
                 </div>
 
                 <!-- User Menu & Logout -->
-                <div class="flex items-center gap-6">
+                <div class="flex items-center gap-4">
                     <div class="text-right hidden md:block">
                         <p class="text-sm font-bold text-white">{{ $user->name ?? $user->username }}</p>
-                        <!-- ADDED: Job Description Display -->
+                        <!-- Job Description Display -->
                         <p class="text-xs font-bold text-blue-400 mt-0.5 uppercase tracking-wide">
                             {{ $user->job_description ?? 'Role Not Set' }}
                         </p>
@@ -41,6 +41,15 @@
                         </p>
                     </div>
                     
+                    <!-- ADDED: Edit Profile Button -->
+                    <a href="{{ route('profile.setup') }}" 
+                    class="bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium py-2 px-4 rounded transition-colors border border-blue-500 shadow-sm flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                        Edit Profile
+                    </a>
+
                     <form method="POST" action="/logout">
                         @csrf
                         <button type="submit" class="bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium py-2 px-5 rounded transition-colors border border-slate-600 shadow-sm">
