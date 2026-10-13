@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Position;
+use App\Models\Grade;
 
 class ProfileController extends Controller
 {
@@ -15,7 +17,10 @@ class ProfileController extends Controller
             $suggestedRole = $matches[1];
         }
 
-        return view('profile.setup', compact('user', 'suggestedRole'));
+        $positions = Position::orderBy('name')->get();
+        $grades = Grade::orderBy('name')->get();
+
+        return view('profile.setup', compact('user', 'suggestedRole', 'positions', 'grades'));
     }
 
     public function update(Request $request)

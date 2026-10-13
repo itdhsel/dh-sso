@@ -94,6 +94,8 @@
                                     <option value="Melayu" {{ old('bangsa', $user->bangsa) == 'Melayu' ? 'selected' : '' }}>Malay</option>
                                     <option value="Cina" {{ old('bangsa', $user->bangsa) == 'Cina' ? 'selected' : '' }}>Chinese</option>
                                     <option value="India" {{ old('bangsa', $user->bangsa) == 'India' ? 'selected' : '' }}>Indian</option>
+                                    <option value="Bumiputra Sarawak" {{ old('bangsa', $user->bangsa) == 'India' ? 'selected' : '' }}>Bumiputra Sarawak</option>
+                                    <option value="Bumiputra Sabah" {{ old('bangsa', $user->bangsa) == 'India' ? 'selected' : '' }}>Bumiputra Sabah</option>
                                     <option value="Lain-lain" {{ old('bangsa', $user->bangsa) == 'Lain-lain' ? 'selected' : '' }}>Others</option>
                                 </select>
                             </div>
@@ -113,10 +115,12 @@
                                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">Position</label>
                                 <select name="job_description" required class="w-full rounded-lg bg-blue-50/50 border border-blue-100 text-slate-800 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all">
                                     <option value="">Please Select</option>
-                                    <option value="Pegawai Teknologi Maklumat" {{ old('job_description', $user->job_description ?? ($suggestedRole == 'ITD' ? 'Pegawai Teknologi Maklumat' : '')) == 'Pegawai Teknologi Maklumat' ? 'selected' : '' }}>Information Technology Officer</option>
-                                    <option value="Pegawai Perubatan" {{ old('job_description', $user->job_description) == 'Pegawai Perubatan' ? 'selected' : '' }}>Medical Officer</option>
-                                    <option value="Jururawat" {{ old('job_description', $user->job_description) == 'Jururawat' ? 'selected' : '' }}>Nurse</option>
-                                    <option value="Pegawai Farmasi" {{ old('job_description', $user->job_description) == 'Pegawai Farmasi' ? 'selected' : '' }}>Pharmacy Officer</option>
+                                    @foreach($positions as $position)
+                                        <option value="{{ $position->name }}" 
+                                            {{ old('job_description', $user->job_description ?? ($suggestedRole == 'ITD' ? 'PEGAWAI TEKNOLOGI MAKLUMAT' : '')) == $position->name ? 'selected' : '' }}>
+                                            {{ $position->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -125,10 +129,12 @@
                                 <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1.5">Grade</label>
                                 <select name="gred" required class="w-full rounded-lg bg-blue-50/50 border border-blue-100 text-slate-800 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all">
                                     <option value="">Please Select</option>
-                                    <option value="F41" {{ old('gred', $user->gred) == 'F41' ? 'selected' : '' }}>F41</option>
-                                    <option value="UD41" {{ old('gred', $user->gred) == 'UD41' ? 'selected' : '' }}>UD41</option>
-                                    <option value="UF41" {{ old('gred', $user->gred) == 'UF41' ? 'selected' : '' }}>UF41</option>
-                                    <option value="U29" {{ old('gred', $user->gred) == 'U29' ? 'selected' : '' }}>U29</option>
+                                    @foreach($grades as $grade)
+                                        <option value="{{ $grade->name }}" 
+                                            {{ old('gred', $user->gred) == $grade->name ? 'selected' : '' }}>
+                                            {{ $grade->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
